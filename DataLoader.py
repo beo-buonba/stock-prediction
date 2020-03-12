@@ -7,11 +7,12 @@ from  config import *
 import csv
 
 
-class DataCollector:
+class DataLoader:
 
-	def __init__(self):
-		self.to_date = DATASET_TO_DATE
-		self.from_date = DATASET_FROM_DATE
+	def __init__(self, to_date=DATASET_TO_DATE, from_date=DATASET_FROM_DATE, stock_list=STOCK_LIST):
+		self.to_date = to_date
+		self.from_date = from_date
+		self.stock_list = stock_list
 
 	@staticmethod
 	def get_date(li, class_name, index):
@@ -40,9 +41,10 @@ class DataCollector:
 	    except:
 	        return 0
 
-	def get_data_from_id(self, stock_id):		
-		from_date = self.from_date
-		to_date = self.to_date
+	@staticmethod
+	def get_data_from_id(start_date, end_date, stock_id):		
+		from_date = start_date
+		to_date = end_date
 		data_table = []
 
 		while True:
@@ -60,23 +62,24 @@ class DataCollector:
 				try:
 					if not li.has_attr('class'):
 						data = {}
-						data["date"] = self.get_date(li, "row-time noline", 0)
+						data["date"] = DataLoader.get_date(li, "row-time noline", 0)
 						# From API, only `change_value` has sign ("+/-")
 						# So have to add sign manually
-						data["change_value"], sign = self.get_change_value(li, "row2", 0)
-						data["change_percent"]= sign * self.get_change_value(li, "row2", 1)[0]
-						data["open_price"] = self.get_trade_value(li, "row1", 0)
-						data["high_price"] = self.get_trade_value(li, "row1", 1)
-						data["low_price"] = self.get_trade_value(li, "row1", 2)
-						data["close_price"] = self.get_trade_value(li, "row1", 3)
-						data["adjust_price"] = self.get_trade_value(li, "row1", 4)
-						data["match_volumn"] = self.get_trade_value(li, "row3", 0)
-						data["reconcile_volumn"] = self.get_trade_value(li, "row3", 1)
+						data["change_value"], sign = DataLoader.get_change_value(li, "row2", 0)
+						data["change_percent"]= sign * DataLoader.get_change_value(li, "row2", 1)[0]
+						data["open_price"] = DataLoader.get_trade_value(li, "row1", 0)
+						data["high_price"] = DataLoader.get_trade_value(li, "row1", 1)
+						data["low_price"] = DataLoader.get_trade_value(li, "row1", 2)
+						data["close_price"] = DataLoader.get_trade_value(li, "row1", 3)
+						data["adjust_price"] = DataLoader.get_trade_value(li, "row1", 4)
+						data["match_volumn"] = DataLoader.get_trade_value(li, "row3", 0)
+						data["reconcile_volumn"] = DataLoader.get_trade_value(li, "row3", 1)
 
 						data_table.append(data)
 				except Exception as e:
 					# Ignore NavigableString object
 					pass
+					
 	        # if there is not data on `from_date`
 	        # then break when total number of data can be query < max query (30 record/page)
 			if data["date"] == from_date or len(soup) < MAX_DATE_CAN_QUERY:
@@ -87,12 +90,12 @@ class DataCollector:
 
 		return data_table
 	
-	def collect_data(self):
+	def collect(self):
 		if not os.path.exists(COMPETITION_DATA_PATH):
 			os.makedirs(COMPETITION_DATA_PATH)
 
-		for stock_id in STOCK_LIST:
-			data = self.get_data_from_id(stock_id)
+		for stock_id in self.stock_list:
+			data = DataLoader.get_data_from_id(self.from_date, self.to_date, stock_id)
 
 			filename = COMPETITION_DATA_PATH + "/" + stock_id + ".csv"
 			keys = data[0].keys()
@@ -101,7 +104,10 @@ class DataCollector:
 				writer.writeheader()
 				writer.writerows(data)
 
+	def load(self):
+		self.data = DataLoader.get_data_from_id(self.from_date, self.to_date, self.stock_list)
+		
 
 if __name__ == "__main__":
-	DC = DataCollector()
-	DC.collect_data()
+	data_loader = DataLoader()
+	data_loader.collect()
