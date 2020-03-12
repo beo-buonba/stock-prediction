@@ -42,7 +42,7 @@ class DataLoader:
 	        return 0
 
 	@staticmethod
-	def get_data_from_id(start_date, end_date, stock_id):		
+	def get_data_from_id(start_date, end_date, stock_id):
 		from_date = start_date
 		to_date = end_date
 		data_table = []
@@ -79,7 +79,7 @@ class DataLoader:
 				except Exception as e:
 					# Ignore NavigableString object
 					pass
-					
+
 	        # if there is not data on `from_date`
 	        # then break when total number of data can be query < max query (30 record/page)
 			if data["date"] == from_date or len(soup) < MAX_DATE_CAN_QUERY:
@@ -89,7 +89,7 @@ class DataLoader:
 				to_date = data["date"]
 
 		return data_table
-	
+
 	def collect(self):
 		if not os.path.exists(COMPETITION_DATA_PATH):
 			os.makedirs(COMPETITION_DATA_PATH)
@@ -106,7 +106,9 @@ class DataLoader:
 
 	def load(self):
 		self.data = DataLoader.get_data_from_id(self.from_date, self.to_date, self.stock_list)
-		
+		self.data = self.data[::-1]
+		return self.data
+
 
 if __name__ == "__main__":
 	data_loader = DataLoader()

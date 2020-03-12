@@ -11,19 +11,19 @@ if __name__ == "__main__":
 	parser.add_argument('--start', default="", dest="start")
 	parser.add_argument('--end', default="", dest="end")
 	args = vars(parser.parse_args())
-	
+
 	if args['end'] == "":
 		end_date = datetime.datetime.today()
-	else: 
+	else:
 		end_date = datetime.datetime.strptime(args['end'], '%d/%m/%Y')
 
 	if args['start'] == "":
-		start_date = end_date - datetime.timedelta(days = 365)
+		start_date = end_date - datetime.timedelta(days = 100)
 	else:
 		start_date = datetime.datetime.strptime(args['start'], '%d/%m/%Y')
 
 	stock_id = args['stock_id']
-	end_date = end_date.strftime('%d/%m/%Y')	
+	end_date = end_date.strftime('%d/%m/%Y')
 	start_date = start_date.strftime('%d/%m/%Y')
 
 	data_loader = DataLoader(from_date=start_date, to_date=end_date, stock_list=stock_id)
@@ -31,4 +31,3 @@ if __name__ == "__main__":
 
 	bb = BollingerBand(data)
 	bb.graph()
-
