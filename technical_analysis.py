@@ -11,6 +11,8 @@ if __name__ == "__main__":
 	parser.add_argument('--start', default="", dest="start")
 	parser.add_argument('--end', default="", dest="end")
 	parser.add_argument('--delta', default="", dest="delta")
+	parser.add_argument('--save_graph', dest="save_graph", action='store_true')
+	parser.add_argument('--show_nontrading', dest="show_nontrading", action='store_true')
 	args = vars(parser.parse_args())
 
 	if args['delta'] == "":
@@ -35,5 +37,5 @@ if __name__ == "__main__":
 	data_loader = DataLoader(from_date=start_date, to_date=end_date, stock_list=stock_id)
 	data = data_loader.load()
 
-	bb = BollingerBand(data)
-	bb.graph()
+	bb = BollingerBand(stock_id, data)
+	bb.graph(save_graph=args['save_graph'], show_nontrading=args['show_nontrading'])

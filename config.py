@@ -7,7 +7,12 @@ MAX_DATE_CAN_QUERY = 30
 ### Competition Configuration
 COMPETITION_NAME = "sample"
 COMPETITION_PATH = "./competition/" + COMPETITION_NAME
-COMPETITION_DATA_PATH = COMPETITION_PATH + "/dataset" 
+COMPETITION_DATA_PATH = COMPETITION_PATH + "/dataset"
+COMPETITION_DATA_FILE = COMPETITION_DATA_PATH + "/{}.csv"
+
+### GRAPH
+GRAPH_PATH = "graph/{}"
+GRAPH_FILE = GRAPH_PATH + "/{}.png"
 
 #VN30 modified
 STOCK_LIST = ["CTG", "BID", "BVH", "CTD", "CTG", "EIB", "FPT", "GAS", "HDB", "HPG", "MBB", "MSN", "MWG", "NVL", "PLX", "PNJ", "POW", "REE", "SAB", "SBT", "TCB", "VCB", "VHM", "VIC", "VJC", "VNM", "VPB", "VRE"]

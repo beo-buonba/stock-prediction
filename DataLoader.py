@@ -108,7 +108,7 @@ class DataLoader:
         for stock_id in self.stock_list:
             data = DataLoader.get_data_from_id(self.from_date, self.to_date, stock_id)
 
-            filename = COMPETITION_DATA_PATH + "/" + stock_id + ".csv"
+            filename = COMPETITION_DATA_FILE.format(stock_id)
             keys = data[0].keys()
             with open(filename, 'w') as output:
                 writer = csv.DictWriter(output, keys)

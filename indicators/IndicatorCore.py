@@ -2,7 +2,8 @@ from abc import abstractmethod
 from math import *
 
 class IndicatorCore:
-	def __init__(self, name, data):
+	def __init__(self, name, stock_id, data):
+		self.stock_id = stock_id
 		self.name = name
 		self.data = data
 		self.data_length = len(data)

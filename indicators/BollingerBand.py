@@ -1,16 +1,15 @@
-
+import os
 from .IndicatorCore import IndicatorCore
 from utils.candle_sticks import *
-from config import NUM_IGNORED_POINT
+from config import NUM_IGNORED_POINT, GRAPH_FILE, GRAPH_PATH
 
 
 class BollingerBand(IndicatorCore):
 	"""
 	Calculate and plot Bollinger Band
 	"""
-	def __init__(self, data):
-		super(BollingerBand, self).__init__("BollingerBand", data)
-
+	def __init__(self, stock_id, data):
+		super(BollingerBand, self).__init__("BollingerBand", stock_id, data)
 		self.band = {}
 		self.band['base'], self.band['lower'], self.band['upper'] = self.get_bands()
 
@@ -34,7 +33,7 @@ class BollingerBand(IndicatorCore):
 		return base, lower, upper
 
 
-	def graph(self, show_nontrading=False):
+	def graph(self, save_graph=False, show_nontrading=False):
 		"""
 		Plot candle sticks and Bollinger Band
 		:param show_nontrading: show gaps of none trading date or not
@@ -46,7 +45,7 @@ class BollingerBand(IndicatorCore):
 		volumes = list(df["match_volume"][NUM_IGNORED_POINT:])
 		fig, ax, formatter, ohlc =  plot_candle_sticks(ohlc, volumes, show_nontrading)
 
-		fig.suptitle('Bollinger Band')
+		fig.suptitle('Bollinger Band of {}'.format(self.stock_id))
 
 		# plot bands
 		ax.fill_between(ohlc['date'], self.band['lower'][NUM_IGNORED_POINT:], self.band['upper'][NUM_IGNORED_POINT:], facecolor=(1,0,0,.4))
@@ -54,4 +53,11 @@ class BollingerBand(IndicatorCore):
 
 		ax.xaxis.set_major_formatter(formatter)
 		fig.autofmt_xdate()
-		plt.show()
+
+
+		if (save_graph):
+			if not os.path.exists(GRAPH_PATH.format(self.stock_id)):
+				os.makedirs(GRAPH_PATH.format(self.stock_id))
+			fig.savefig(GRAPH_FILE.format(self.stock_id, 'Bollinger_Band'))
+		else:
+			plt.show()

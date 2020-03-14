@@ -1,5 +1,7 @@
 # Data file
 *.csv
+# Output graph
+graph/
 # Pycharm log
 .idea/
 # Byte-compiled / optimized / DLL files
