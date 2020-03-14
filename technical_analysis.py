@@ -1,8 +1,8 @@
+import datetime
 from argparse import ArgumentParser
 from DataLoader import DataLoader
 from indicators.BollingerBand import BollingerBand
-import datetime
-
+from config import DATE_FORMAT_STRING
 
 
 if __name__ == "__main__":
@@ -15,16 +15,16 @@ if __name__ == "__main__":
 	if args['end'] == "":
 		end_date = datetime.datetime.today()
 	else:
-		end_date = datetime.datetime.strptime(args['end'], '%d/%m/%Y')
+		end_date = datetime.datetime.strptime(args['end'], DATE_FORMAT_STRING)
 
 	if args['start'] == "":
 		start_date = end_date - datetime.timedelta(days = 100)
 	else:
-		start_date = datetime.datetime.strptime(args['start'], '%d/%m/%Y')
+		start_date = datetime.datetime.strptime(args['start'], DATE_FORMAT_STRING)
 
 	stock_id = args['stock_id']
-	end_date = end_date.strftime('%d/%m/%Y')
-	start_date = start_date.strftime('%d/%m/%Y')
+	end_date = end_date.strftime(DATE_FORMAT_STRING)
+	start_date = start_date.strftime(DATE_FORMAT_STRING)
 
 	data_loader = DataLoader(from_date=start_date, to_date=end_date, stock_list=stock_id)
 	data = data_loader.load()
