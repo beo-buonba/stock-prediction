@@ -50,6 +50,7 @@ class DataLoader:
         from_date = start_date
         to_date = end_date
         data_table = []
+        date_set = set() # Prevend duplicates
 
         while True:
             data_form = {
@@ -67,6 +68,9 @@ class DataLoader:
                     if not li.has_attr('class'):
                         data = {}
                         data["date"] = DataLoader.get_date(li, "row-time noline", 0)
+                        if data["date"] in date_set:
+                            continue
+                        date_set.add(data["date"])
                         # From API, only `change_value` has sign ("+/-")
                         # So have to add sign manually
                         data["change_value"], sign = DataLoader.get_change_value(li, "row2", 0)

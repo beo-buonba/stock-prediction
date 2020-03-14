@@ -3,10 +3,10 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import matplotlib.dates as mpl_dates
 from mpl_finance import candlestick_ohlc
-from utils.graph_utils import IntegerIndexDateTimeFormatter
+from utils.graph_utils import IntegerIndexDateTimeFormatter, _updown_colors
 from config import DATE_FORMAT_STRING
 
-def plot_candle_sticks(ohlc, show_nontrading=False):
+def plot_candle_sticks(ohlc, volumes, show_nontrading=False):
     """
     Plot candle sticks graph
     :return:
@@ -23,11 +23,26 @@ def plot_candle_sticks(ohlc, show_nontrading=False):
         ohlc['date'] = np.arange(len(ohlc['date']))
 
     # Define subplots, setting labels & titles
-    fig, ax = plt.subplots()
-    ax.set_xlabel('Date')
-    ax.set_ylabel('Price')
+    fig = plt.figure()
+    ax1 = fig.add_axes([0.15, 0.38, 0.70, 0.50])
+    ax2 = fig.add_axes([0.15, 0.18, 0.70, 0.20], sharex=ax1)
+    plt.xticks(rotation=45)
+    ax2.set_axisbelow(True)
+    ax4 = ax2.twinx()
+    ax4.grid(False)
+
+    colors = _updown_colors(ohlc)
+    avg_dist_between_points = (ohlc['date'][ohlc.index[-1]] - ohlc['date'][ohlc.index[0]]) / float(len(ohlc['date']))
+    width = 0.5 * avg_dist_between_points
+    ax2.bar(ohlc['date'], volumes, width=width, color=colors)
+    miny = 0.3 * min(volumes)
+    maxy = 1.1 * max(volumes)
+    ax2.set_ylim(miny, maxy)
+    ax2.xaxis.set_major_formatter(formatter)
+
+
 
     # plot candle sticks to subplot
-    candlestick_ohlc(ax, ohlc.values, width=0.6, colorup='green', colordown='red', alpha=0.8)
+    candlestick_ohlc(ax1, ohlc.values, width=0.6, colorup='green', colordown='red', alpha=0.8)
 
-    return fig, ax, formatter, ohlc
+    return fig, ax1, formatter, ohlc

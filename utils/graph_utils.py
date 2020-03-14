@@ -36,3 +36,7 @@ class IntegerIndexDateTimeFormatter(Formatter):
             date = self.dates[ix]
             dateformat = mdates.num2date(date).strftime(self.fmt)
         return dateformat
+
+
+def _updown_colors(ohlc):
+    return ["red" if row["open_price"] > row["close_price"] else "green" for i, row in ohlc.iterrows()]

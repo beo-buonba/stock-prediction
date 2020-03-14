@@ -10,7 +10,13 @@ if __name__ == "__main__":
 	parser.add_argument('--stock_id', required=True, dest="stock_id")
 	parser.add_argument('--start', default="", dest="start")
 	parser.add_argument('--end', default="", dest="end")
+	parser.add_argument('--delta', default="", dest="delta")
 	args = vars(parser.parse_args())
+
+	if args['delta'] == "":
+		delta = 365
+	else:
+		delta = int(args['delta'])
 
 	if args['end'] == "":
 		end_date = datetime.datetime.today()
@@ -18,7 +24,7 @@ if __name__ == "__main__":
 		end_date = datetime.datetime.strptime(args['end'], DATE_FORMAT_STRING)
 
 	if args['start'] == "":
-		start_date = end_date - datetime.timedelta(days = 100)
+		start_date = end_date - datetime.timedelta(days=delta)
 	else:
 		start_date = datetime.datetime.strptime(args['start'], DATE_FORMAT_STRING)
 

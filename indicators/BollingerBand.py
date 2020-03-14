@@ -43,7 +43,8 @@ class BollingerBand(IndicatorCore):
 		# Generate ohlc df from data, convert datetime format
 		df = pd.DataFrame(self.data)
 		ohlc = df.loc[NUM_IGNORED_POINT:, ['date', 'open_price', 'high_price', 'low_price', 'close_price']]
-		fig, ax, formatter, ohlc =  plot_candle_sticks(ohlc, show_nontrading)
+		volumes = list(df["match_volume"][NUM_IGNORED_POINT:])
+		fig, ax, formatter, ohlc =  plot_candle_sticks(ohlc, volumes, show_nontrading)
 
 		fig.suptitle('Bollinger Band')
 
@@ -53,5 +54,4 @@ class BollingerBand(IndicatorCore):
 
 		ax.xaxis.set_major_formatter(formatter)
 		fig.autofmt_xdate()
-		fig.tight_layout()
 		plt.show()
