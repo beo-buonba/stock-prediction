@@ -1,8 +1,8 @@
-
+from .IndicatorCore import IndicatorCore
 
 class BollingerBand(IndicatorCore):
 	"""
-	Calculate and plot Bollinger Band
+	Bollinger Band indicator
 	"""
 	def __init__(self, stock_id, data):
 		super(BollingerBand, self).__init__("BollingerBand", stock_id, data)
@@ -29,31 +29,11 @@ class BollingerBand(IndicatorCore):
 		return base, lower, upper
 
 
-	def graph(self, save_graph=False, show_nontrading=False):
+	def graph(self):
 		"""
-		Plot candle sticks and Bollinger Band
-		:param show_nontrading: show gaps of none trading date or not
+		Plot candle sticks and Bollinger Band		
 		"""
-
-		# Generate ohlc df from data, convert datetime format
-		df = pd.DataFrame(self.data)
-		ohlc = df.loc[NUM_IGNORED_POINT:, ['date', 'open_price', 'high_price', 'low_price', 'close_price']]
-		volumes = list(df["match_volume"][NUM_IGNORED_POINT:])
-		fig, ax, formatter, ohlc =  plot_candle_sticks(ohlc, volumes, show_nontrading)
-
-		fig.suptitle('Bollinger Band of {}'.format(self.stock_id))
-
-		# plot bands
-		ax.fill_between(ohlc['date'], self.band['lower'][NUM_IGNORED_POINT:], self.band['upper'][NUM_IGNORED_POINT:], facecolor=(1,0,0,.4))
-		ax.plot(ohlc['date'], self.band['base'][NUM_IGNORED_POINT:], color='blue')
-
-		ax.xaxis.set_major_formatter(formatter)
-		fig.autofmt_xdate()
+		self.plot_candles(volume_bars=True, overlays=[self.band['upper'], self.band['base'], self.band['lower']])
 
 
-		if (save_graph):
-			if not os.path.exists(GRAPH_PATH.format(self.stock_id)):
-				os.makedirs(GRAPH_PATH.format(self.stock_id))
-			fig.savefig(GRAPH_FILE.format(self.stock_id, 'Bollinger_Band'))
-		else:
-			plt.show()
+		

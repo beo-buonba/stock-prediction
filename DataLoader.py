@@ -82,7 +82,6 @@ class DataLoader:
                         data["adjust_price"] = DataLoader.get_trade_value(li, "row1", 4)
                         data["match_volume"] = DataLoader.get_trade_value(li, "row3", 0)
                         data["reconcile_volume"] = DataLoader.get_trade_value(li, "row3", 1)
-
                         data_table.append(data)
                 except Exception as e:
                     # Ignore NavigableString object
