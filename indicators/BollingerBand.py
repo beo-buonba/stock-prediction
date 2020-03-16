@@ -1,6 +1,6 @@
 from .IndicatorCore import IndicatorCore
 import matplotlib.pyplot as plt
-from mpl-finance import candlestick_ohlc
+from mpl_finance import candlestick_ohlc
 import pandas as pd
 import matplotlib.dates as mpl_dates
 
