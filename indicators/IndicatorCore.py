@@ -2,7 +2,8 @@ from abc import abstractmethod
 from math import *
 
 class IndicatorCore:
-	def __init__(self, name, data):
+	def __init__(self, name, stock_id, data):
+		self.stock_id = stock_id
 		self.name = name
 		self.data = data
 		self.data_length = len(data)
@@ -17,10 +18,10 @@ class IndicatorCore:
 			else:
 				sma_sum += self.data[i]['close_price']
 				sma.append(sma_sum/n)
-				sma_sum -= self.data[i-n+1]['close_price']    			
+				sma_sum -= self.data[i-n+1]['close_price']
 		return sma
 
-	def std_deviation(n):
+	def std_deviation(self, n):
 		sma = self.sma(n)
 		std_deviation = []
 
@@ -45,4 +46,3 @@ class IndicatorCore:
 	@abstractmethod
 	def graph(self):
 		pass
-
