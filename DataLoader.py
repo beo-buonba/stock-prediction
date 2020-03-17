@@ -9,7 +9,7 @@ class DataLoader:
     """
     Crawl data from vndirect
     """
-    def __init__(self, to_date=DATASET_TO_DATE, from_date=DATASET_FROM_DATE, stock_list=STOCK_LIST):
+    def __init__(self, to_date=DATASET_END_DATE, from_date=DATASET_START_DATE, stock_list=STOCK_LIST):
         self.to_date = to_date
         self.from_date = from_date
         self.stock_list = stock_list
@@ -109,6 +109,7 @@ class DataLoader:
         if not os.path.exists(COMPETITION_DATA_PATH):
             os.makedirs(COMPETITION_DATA_PATH)
 
+        data_table = {}
         for stock_id in self.stock_list:
             data = DataLoader.get_data_from_id(self.from_date, self.to_date, stock_id)
 
@@ -118,6 +119,10 @@ class DataLoader:
                 writer = csv.DictWriter(output, keys)
                 writer.writeheader()
                 writer.writerows(data)
+            data_table[stock_id] = data
+
+        return data_table
+
 
     def load(self):
         """
