@@ -79,9 +79,14 @@ class DataLoader:
                         data["high_price"] = DataLoader.get_trade_value(li, "row1", 1)
                         data["low_price"] = DataLoader.get_trade_value(li, "row1", 2)
                         data["close_price"] = DataLoader.get_trade_value(li, "row1", 3)
-                        data["adjust_price"] = DataLoader.get_trade_value(li, "row1", 4)
+                        data["adjust_price"] = DataLoader.get_trade_value(li, "row1", 5)
                         data["match_volume"] = DataLoader.get_trade_value(li, "row3", 0)
                         data["reconcile_volume"] = DataLoader.get_trade_value(li, "row3", 1)
+                        if data["close_price"] != data["adjust_price"]:
+                            data['open_price'] = data["adjust_price"] * data["open_price"] / data["close_price"]
+                            data['high_price'] = data["adjust_price"] * data["high_price"] / data["close_price"]
+                            data['low_price'] = data["adjust_price"] * data["low_price"] / data["close_price"]
+                            data['close_price'] = data["adjust_price"]
                         data_table.append(data)
                 except Exception as e:
                     # Ignore NavigableString object

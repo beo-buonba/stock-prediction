@@ -33,7 +33,7 @@ class BollingerBand(IndicatorCore):
 		"""
 		Plot candle sticks and Bollinger Band		
 		"""
-		self.plot_candles(volume_bars=True, overlays=[self.band['upper'], self.band['base'], self.band['lower']])
-
+		#self.plot_candles(volume_bars=True, overlays=[self.band['upper'], self.band['base'], self.band['lower']])
+		self.plot_candles(volume_bars=True, overlays=[self.ema(20)])
 
 		

@@ -17,7 +17,7 @@ class IndicatorCore:
 		sma_sum = 0
 		sma = []
 		for i in range(self.data_length):
-			if (i<n-1):
+			if (i < n-1):
 				sma_sum += self.data[i]['close_price']
 				sma.append(None)
 			else:
@@ -25,6 +25,21 @@ class IndicatorCore:
 				sma.append(sma_sum/n)
 				sma_sum -= self.data[i-n+1]['close_price']
 		return sma
+
+	def ema(self, n):
+		ema_sum = 0
+		ema = []
+		for i in range(self.data_length):
+			if (i < n-1):
+				ema_sum += self.data[i]['close_price']
+				ema.append(None)
+			elif (i == n-1 ):
+				ema_sum /= n
+				ema.append(ema_sum)
+			else:
+				ema_sum = (self.data[i]['close_price'] - ema_sum) * 2 / (n + 1) + ema_sum
+				ema.append(ema_sum)
+		return ema
 
 	def std_deviation(self, n):
 		sma = self.sma(n)
@@ -115,10 +130,6 @@ class IndicatorCore:
 			if i < len(technicals_titles):
 				ax.set_title(technicals_titles[i])
 		plt.show()
-
-	@abstractmethod
-	def indicate(self):
-		pass
 
 	@abstractmethod
 	def graph(self):
